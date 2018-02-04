@@ -36,12 +36,12 @@ class User {
 		
 		$params=array(
 			'headers'=>$headers,
-			'timeout'  => 10.0,
-			'verify'	=>false,
+			'timeout'	=> $this->letgo->timeout,
+			'verify'	=>$this->letgo->verify,
 		);
 
 		try {
-			$response=$this->client->get($this->letgo::API_URL.'/users/'.$userId,$params);
+			$response=$this->client->get($this->letgo::$API_URL.'/users/'.$userId,$params);
 			if($response->getStatusCode()==200 && $response->getReasonPhrase()=='OK'){
 				$data=$response->json();
 				return $data;
@@ -83,12 +83,12 @@ class User {
 		$params=array(
 			'headers'	=>$headers,
 			'body'		=>$fields,
-			'timeout'	=> 10.0,
-			'verify'	=>false,
+			'timeout'	=> $this->letgo->timeout,
+			'verify'	=>$this->letgo->verify,
 		);
 
 		try {
-			$response=$this->client->post($this->letgo::API_URL.'/users',$params);
+			$response=$this->client->post($this->letgo::$API_URL.'/users',$params);
 			if($response->getStatusCode()==201 && $response->getReasonPhrase()=='Created'){
 				return true;
 			}else{
@@ -121,7 +121,6 @@ class User {
 
 		$headers=array(
 			'Content-Type'	=>'application/x-www-form-urlencoded',
-			//'Content-Type'	=>'application/json',
 			'Accept'		=>'json/letgo.providers.api.beta.v1',
 			'Authorization'	=>$this->letgo->getToken()
 		);
@@ -129,12 +128,12 @@ class User {
 		$params=array(
 			'headers'	=>$headers,
 			'body' 		=>$fields,
-			'timeout'	=> 10.0,
-			'verify'	=>false,
+			'timeout'	=> $this->letgo->timeout,
+			'verify'	=>$this->letgo->verify,
 		);
 
 		try {
-			$response=$this->client->put($this->letgo::API_URL.'/users/'.$userId,$params);
+			$response=$this->client->put($this->letgo::$API_URL.'/users/'.$userId,$params);
 			
 			if($response->getStatusCode()==202 && $response->getReasonPhrase()=='Accepted'){
 				return true;
@@ -160,12 +159,12 @@ class User {
 		
 		$params=array(
 			'headers'=>$headers,
-			'timeout'  => 10.0,
-			'verify'	=>false,
+			'timeout'	=> $this->letgo->timeout,
+			'verify'	=>$this->letgo->verify,
 		);
 
 		try {
-			$response=$this->client->get($this->letgo::API_URL.'/users',$params);
+			$response=$this->client->get($this->letgo::$API_URL.'/users',$params);
 			if($response->getStatusCode()==200 && $response->getReasonPhrase()=='OK'){
 				$data=$response->json();
 				return $data;

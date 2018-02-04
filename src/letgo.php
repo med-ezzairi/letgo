@@ -11,14 +11,20 @@ Class LetGo {
 	private $client;
 
 	public $User;
-	private $API_KEY	='';
-	private $API_SECRET	='';
 
-	const API_URL	='https://providers.stg.letgo.com';
+	//Your personal API_KEY
+	private static $API_KEY	='';
+	//Your personal API_SECRET
+	private static $API_SECRET	='';
+	//Default API_URL (Dev and Prod are diff.)
+	public static $API_URL	='https://providers.stg.letgo.com';//it's for Dev (sandbox)
 	
 
-	private $debug=true;
-	private $file='./curl_debug.txt';
+	//verify ssl_host
+	public $verify	=true;
+	//in seconds
+	public $timeout=5.0;
+
 	private $session_var_name='letgo_token';
 
 	public function __construct($config=array()){
@@ -26,8 +32,20 @@ Class LetGo {
 			die('empty config, please provide your API_KEY and API_SECRET');
 		}
 
-		$this->API_KEY		=$config['API_KEY'];
-		$this->API_SECRET	=$config['API_SECRET'];
+		$this::$API_KEY		=$config['API_KEY'];
+		$this::$API_SECRET	=$config['API_SECRET'];
+
+		if(isset($config['API_URL']) && !empty($config['API_URL'])) {
+			self::$API_URL 	=$config['API_URL'];
+		}
+
+		if(isset($config['verify']) && is_bool($config['verify'])) {
+			$this->verify 	=$config['verify'];
+		}
+
+		if(isset($config['timeout']) && is_float($config['timeout'])) {
+			$this->timeout 	=$config['timeout'];
+		}
 
 		$this->client=new Client();
 		$this->User=new User($this,$this->client);
@@ -87,19 +105,19 @@ Class LetGo {
 		);
 
 		$fields=array(
-			"key"	=>$this->API_KEY,
-			"secret"=>$this->API_SECRET
+			"key"	=>self::$API_KEY,
+			"secret"=>self::$API_SECRET
 		);
 
 		$params=array(
 			'headers'	=>$headers,
 			'body'		=>$fields,
-			'timeout'  	=> 2.0,
-			'verify'	=>false,
+			'timeout'  	=>$this->timeout,
+			'verify'	=>$this->verify,
 		);
 		
 		try {
-			$response = $this->client->post(self::API_URL.'/auth',$params);
+			$response = $this->client->post(self::$API_URL.'/auth',$params);
 			if($response->getStatusCode()==200 && $response->getReasonPhrase()=='OK'){
 				$token=$response->json();
 				var_dump($token);
@@ -133,7 +151,7 @@ Class LetGo {
 		);
 
 		try {
-			$response=$this->client->get(self::API_URL.'/cars/attributes',$params);
+			$response=$this->client->get(self::$API_URL.'/cars/attributes',$params);
 			if($response->getStatusCode()==200 && $response->getReasonPhrase()=='OK'){
 				$data=$response->json();
 				return $data;
