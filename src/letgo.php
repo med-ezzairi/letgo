@@ -11,16 +11,24 @@ Class LetGo {
 	private $client;
 
 	public $User;
+	private $API_KEY	='';
+	private $API_SECRET	='';
 
 	const API_URL	='https://providers.stg.letgo.com';
-	const API_KEY	='your_api_key';
-	const API_SECRET='your_api_secret';
+	
 
 	private $debug=true;
 	private $file='./curl_debug.txt';
 	private $session_var_name='letgo_token';
 
-	public function __construct(){
+	public function __construct($config=array()){
+		if(empty($config) || !isset($config['API_KEY']) || !isset($config['API_SECRET'])) {
+			die('empty config, please provide your API_KEY and API_SECRET');
+		}
+
+		$this->API_KEY		=$config['API_KEY'];
+		$this->API_SECRET	=$config['API_SECRET'];
+
 		$this->client=new Client();
 		$this->User=new User($this,$this->client);
 	}
@@ -79,14 +87,14 @@ Class LetGo {
 		);
 
 		$fields=array(
-			"key"	=>self::API_KEY,
-			"secret"=>self::API_SECRET
+			"key"	=>$this->API_KEY,
+			"secret"=>$this->API_SECRET
 		);
 
 		$params=array(
-			'headers'=>$headers,
-			'body'	=>$fields,
-			'timeout'  => 2.0,
+			'headers'	=>$headers,
+			'body'		=>$fields,
+			'timeout'  	=> 2.0,
 			'verify'	=>false,
 		);
 		
