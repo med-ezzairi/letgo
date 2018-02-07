@@ -1,5 +1,15 @@
 <?php 
 
+/**
+* User class to be used with LetGo
+* Creating Users, Getting User's Data, Updating User's Data
+* 
+* 
+* @author Mohamed@v12
+* @date   2018-02-01
+*/
+
+
 namespace LetGo;
 
 
@@ -41,7 +51,7 @@ class User {
 		);
 
 		try {
-			$response=$this->client->get($this->letgo::$API_URL.'/users/'.$userId,$params);
+			$response=$this->client->get($this->letgo->API_URL.'/users/'.$userId,$params);
 			if($response->getStatusCode()==200 && $response->getReasonPhrase()=='OK'){
 				$data=$response->json();
 				return $data;
@@ -88,7 +98,7 @@ class User {
 		);
 
 		try {
-			$response=$this->client->post($this->letgo::$API_URL.'/users',$params);
+			$response=$this->client->post($this->letgo->API_URL.'/users',$params);
 			if($response->getStatusCode()==201 && $response->getReasonPhrase()=='Created'){
 				return true;
 			}else{
@@ -133,7 +143,7 @@ class User {
 		);
 
 		try {
-			$response=$this->client->put($this->letgo::$API_URL.'/users/'.$userId,$params);
+			$response=$this->client->put($this->letgo->API_URL.'/users/'.$userId,$params);
 			
 			if($response->getStatusCode()==202 && $response->getReasonPhrase()=='Accepted'){
 				return true;
@@ -164,7 +174,7 @@ class User {
 		);
 
 		try {
-			$response=$this->client->get($this->letgo::$API_URL.'/users',$params);
+			$response=$this->client->get($this->letgo->API_URL.'/users',$params);
 			if($response->getStatusCode()==200 && $response->getReasonPhrase()=='OK'){
 				$data=$response->json();
 				return $data;

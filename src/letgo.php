@@ -1,5 +1,14 @@
 <?php 
 
+/**
+* LetGo class that let you do all staff
+* Authenticating, Getting Cars Attributes (Makes and Models)
+* generating GUIDv4
+* 
+* @author Mohamed@v12
+* @date   2018-02-01
+*/
+
 namespace LetGo;
 
 use GuzzleHttp\Client;
@@ -17,7 +26,7 @@ Class LetGo {
 	//Your personal API_SECRET
 	private static $API_SECRET	='';
 	//Default API_URL (Dev and Prod are diff.)
-	public static $API_URL	='https://providers.stg.letgo.com';//it's for Dev (sandbox)
+	public $API_URL	='https://providers.stg.letgo.com';//it's for Dev (sandbox)
 	
 
 	//verify ssl_host
@@ -36,7 +45,7 @@ Class LetGo {
 		$this::$API_SECRET	=$config['API_SECRET'];
 
 		if(isset($config['API_URL']) && !empty($config['API_URL'])) {
-			self::$API_URL 	=$config['API_URL'];
+			$this->API_URL 	=$config['API_URL'];
 		}
 
 		if(isset($config['verify']) && is_bool($config['verify'])) {
@@ -117,7 +126,7 @@ Class LetGo {
 		);
 		
 		try {
-			$response = $this->client->post(self::$API_URL.'/auth',$params);
+			$response = $this->client->post($this->API_URL.'/auth',$params);
 			if($response->getStatusCode()==200 && $response->getReasonPhrase()=='OK'){
 				$token=$response->json();
 				var_dump($token);
@@ -151,7 +160,7 @@ Class LetGo {
 		);
 
 		try {
-			$response=$this->client->get(self::$API_URL.'/cars/attributes',$params);
+			$response=$this->client->get($this->API_URL.'/cars/attributes',$params);
 			if($response->getStatusCode()==200 && $response->getReasonPhrase()=='OK'){
 				$data=$response->json();
 				return $data;

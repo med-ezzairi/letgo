@@ -1,10 +1,16 @@
 <?php 
 
+/**
+* Vehicle class to be used with LetGo
+* Creating Cars, Getting Car's Data, Updating Car's Data
+* 
+* 
+* @author Mohamed@v12
+* @date   2018-02-01
+*/
+
 namespace LetGo;
 
-/**
-* a vehicle class to be used to manage cars on LetGo
-*/
 class Car
 {
 	
@@ -51,7 +57,7 @@ class Car
 		);
 
 		try {
-			$response=$this->client->get($this->letgo::$API_URL."/users/{$this->userId}/cars/{$carId}/status",$params);
+			$response=$this->client->get($this->letgo->API_URL."/users/{$this->userId}/cars/{$carId}/status",$params);
 			//var_dump($response);exit;
 			if ($response->getStatusCode()==200 && $response->getReasonPhrase()=='OK') {
 				$data=$response->json();
@@ -85,6 +91,14 @@ class Car
 			"carId", // string|uuid
 			"name",
 			"description",
+			"countryCode",
+			"city",
+			"zipCode",
+			"latitude",
+			"longitude",
+			"priceAmount",
+			"year",
+			"images",
 		);
 
 		//var_dump($fields);exit;
@@ -101,19 +115,28 @@ class Car
 
 		$headers=array(
 			'Content-Type'	=>'application/x-www-form-urlencoded',
+			//'Content-Type'	=>'multipart/form-data',//for files
 			'Accept'		=>'json/letgo.providers.api.beta.v1',
 			'Authorization'	=>$this->letgo->getToken()
 		);
+
+		/*
+		//get files content for images
+		foreach ($fields['images'] as $key=>$image) {
+			$fields['images'][$key]=fopen($image, 'r');
+		}
+		*/
 
 		$params=array(
 			'headers'	=>$headers,
 			'body'		=>$fields,
 			'timeout'	=> $this->letgo->timeout,
 			'verify'	=>$this->letgo->verify,
+			//'debug' 	=> true,
 		);
 
 		try {
-			$response=$this->client->post($this->letgo::$API_URL."/users/{$this->userId}/cars",$params);
+			$response=$this->client->post($this->letgo->API_URL."/users/{$this->userId}/cars",$params);
 			var_dump($response);exit;
 			if ($response->getStatusCode()==202 && $response->getReasonPhrase()=='Accepted') {
 				return true;
@@ -155,7 +178,7 @@ class Car
 
 		try {
 			$response=$this->client->get(
-				$this->letgo::$API_URL."/users/{$this->userId}/cars/{$carId}",
+				$this->letgo->API_URL."/users/{$this->userId}/cars/{$carId}",
 				$params
 			);
 			//var_dump($response);exit;
@@ -172,8 +195,9 @@ class Car
 	}
 
 	/**
-	* 
-	* 
+	* Get a Listing for a user (specified by userId)
+	* @param string (userId as guid)
+	* @return mixed (array | boolean)
 	* 
 	*/
 	public function all($userId='')
@@ -200,7 +224,7 @@ class Car
 		);
 
 		try {
-			$response=$this->client->get($this->letgo::$API_URL."/users/{$this->userId}/cars",$params);
+			$response=$this->client->get($this->letgo->API_URL."/users/{$this->userId}/cars",$params);
 			//var_dump($response);exit;
 			if ($response->getStatusCode()==200 && $response->getReasonPhrase()=='OK') {
 				$data=$response->json();
