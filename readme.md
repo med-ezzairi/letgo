@@ -1,11 +1,14 @@
 ## LetGo-PHP-Client
 
-This is a package to be used with Guzzele v5.3.0 (because of php 5.4) to consume LetGo REST API. so please use it on your own.
+This is a package to be used with Guzzele v5.3.0 (because of php 5.4) to consume LetGo REST API. 
+so please use it on your own.
+
+**Note:** it uses the open_ssl to generate random bytes
 
 * LetGo API documentation [here](https://hackmd.io/MwEwbAnBYOwCwFoCGYBMSFwBwgKbIDMsBGBAYywAZgAjGYy1XJEIA===)
 
 * Guzzele documentation [here](http://docs.guzzlephp.org/en/5.3/overview.html)
-* 
+
 #### Install
 
 
@@ -17,16 +20,16 @@ composer require med-ezzairi/letgo "1.0.*"
 
 ```
 $config=array(
-    //this is for dev
+	//this is for dev
 	'API_URL'	=>'https://providers.stg.letgo.com',
-    //API key provided by letgo.com
+	//API key provided by letgo.com
 	'API_KEY'	=>'your_api_key',
-    //api secret is also provided by them
+	//api secret is also provided by them
 	'API_SECRET'=>'your_api_secret',
-    //to avoid ssl host verificatio
+	//to avoid ssl host verificatio
 	'verify'	=>false,
-    //connection timeout
-	'timeout'	=>10.0
+	//connection timeout
+	'timeout'	=>10.0,
 );
 ```
 
@@ -66,7 +69,7 @@ $guid=$letgo->getGuid();
 
 ```
 /**
-* I work with v12software.com, which is a Dealership Management System 
+* I work for v12software.com, which is a Dealership Management System 
 * So, posting cars on letgo requires to specify makeId & modelId
 * for each car, and those are guids, you can get them easily
 * 
@@ -84,6 +87,7 @@ var_dump($carsAttribs);
 #### Create
 
 ```
+//generate a guid for our user
 $genGuid=$letgo->getGuid();
 
 $userData=array(
@@ -136,3 +140,6 @@ var_dump($data);
 
 for now I'm running on an issue on car creation, please hold on, will the problem is solved I will post the rest of the package doc.
 
+```
+exit(1);
+```
